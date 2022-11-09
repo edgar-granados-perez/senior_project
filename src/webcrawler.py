@@ -4,7 +4,7 @@ from selenium.webdriver.chrome.options import Options
 
 # the chrome version for this application is chrome 107
 def setbrowserOS():
-        macPath = '/Users/edgargranadosperez/Desktop/Git Projects/senior_project/src/chromedrivermac'
+        macPath = '/Users/edgargranadosperez/Desktop/Git Projects/senior_project/src/chromedriver'
         windowsPath = 'C:\\Users\\myPC\\iCloudDrive\Desktop\\Git Projects\\senior_project\\src\\chromedriver.exe'
         browser = None
         while True:
@@ -17,7 +17,7 @@ def setbrowserOS():
                     browser = webdriver.Chrome(executable_path=windowsPath)
                     return browser
             else :
-                print("please type the correct os either \"mac\" or \"os\"")
+                print("please type the correct os either \"mac\" or \"windows\"")
 
 def convertAdvanced(symptom:str):
     advancedString: str  = "({}[Title/Abstract])".format(symptom)
@@ -49,14 +49,36 @@ def individualQuery(browser: webdriver, site: str, symptoms: list[str]):
         e = browser.find_element("id",'id_term')
         e.send_keys(sepSearch)
         e.send_keys(Keys.ENTER)
+def symptomQuestion():
+    symptom = input("What is a symptom of the disease?: ")
+    return symptom
+    
+
+def symptomList():
+    list = []
+    symptom = symptomQuestion()
+    list. append(symptom)
+    while True:
+        userResponse = input("Would you like add a symptom. yes or no: ")
+        if userResponse in ["yes", "no"]:
+            if userResponse == "yes":
+                symptom = symptomQuestion()
+                list.append(symptom)
+            elif userResponse == "no":
+                return list
+                break
+        else: 
+            print("type yes or no")
 
 
 def startwebcrawler():
+    global browser
+    browser = setbrowserOS()
+    symptoms = symptomList()
     pubmed ='https://pubmed.ncbi.nlm.nih.gov/'
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("--incognito")
-    global browser
-    browser = setbrowserOS()
-    symptomsAdvancedQuery(browser=browser, site= pubmed, symptoms= ["obesity", "high blood pressure", "diabetes"])
-    individualQuery(browser=browser, site= pubmed, symptoms= ["obesity", "high blood pressure", "diabetes"])
+    symptomsAdvancedQuery(browser=browser, site= pubmed, symptoms= symptoms)
+    individualQuery(browser=browser, site= pubmed, symptoms= symptoms)
+
 
